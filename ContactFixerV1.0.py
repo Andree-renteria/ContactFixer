@@ -1,11 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from Tkinter import *
-import tkFileDialog
-
+from tkinter import *
+from tkinter import ttk
 import re
-import ttk
 import linecache
 import csv
 import itertools
@@ -59,7 +57,7 @@ def SelectCsv():
     #Print GUI Entry
     pathText.insert(END, myFilePath)
     #Print selected to console
-    print "The file: " + myFilePath + " was succesfully added."
+    print("The file: " + myFilePath + " was succesfully added.")
     consoleView.insert(END, "La agenda: \n" + myFilePath + "\nfue añadida exitosamente.\n")
 
 def dedupeRoutine():
@@ -88,7 +86,7 @@ def dedupeRoutine():
         
         data.append(unique())
         
-        print len(data[0])
+        print(len(data[0]))
         consoleView.insert(END, "------------------------------------------------------\n")
         consoleView.insert(END, "Buscando Registros Unicos.\n")
         consoleView.insert(END, "------------------------------------------------------\n")
@@ -97,9 +95,9 @@ def dedupeRoutine():
         combinationCalculation = len(data[0])
         
         outputFile = os.path.dirname(myFilePath)
-        print outputFile
+        print(outputFile)
         outputFile = outputFile + "/DedupedCSVFile.csv"
-        print outputFile
+        print(outputFile)
         
         writer = csv.writer(open(outputFile, "wb"))
             
@@ -117,7 +115,7 @@ def dedupeRoutine():
                     #print loopCounter
                     
                     progressCounter = (float(rowNumber)/float(combinationCalculation)) * 100.0
-                    print progressCounter
+                    print(progressCounter)
                     
                     progressbar["value"] = progressCounter
                 
@@ -141,7 +139,7 @@ def dedupeRoutine():
         
     except IOError:
         
-        print "No file was selected, please select a file."
+        print("No file was selected, please select a file.")
         consoleView.insert(END, """No se eligio ninguna agenda, por favor seleccione una agenda con extension ".csv" \n""" )
         
 #Create Buttons to Interact in GUI
