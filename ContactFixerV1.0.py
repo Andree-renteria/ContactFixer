@@ -14,6 +14,7 @@ import csv
 import collections
 import numpy as np
 from pprint import pprint
+import time
 
 #Csv FileName
 myFile = ""
@@ -49,22 +50,38 @@ def modified(self, event):
 def SelectCsv():
     global csvFile
     global myFilePath
+    
     #Define File Extension
-    csvFile = filedialog.askopenfile("rb", filetypes=[("CSV Files","*.csv")])
+    csvFile = filedialog.askopenfile(
+                                    "r", 
+                                    filetypes=[("CSV Files","*.csv")]
+                                    )
+
     #Make String Copy to display
     myFilePath = str(csvFile)
+    
     #Parse Path Information
     myFilePath = myFilePath.split("'", 1)[1].split("'")[0]
+    
     #Print GUI Entry
     pathText.insert(END, myFilePath)
+    
     #Print selected to console
     print("The file: " + myFilePath + " was succesfully added.")
+
+    printConsoleSeparator() 
     consoleView.insert(
                         END, 
-                        "The CSV file: \n" + 
+                        "The CSV file: " + 
                         myFilePath + 
-                        "\nwas added succesfully.\n"
+                        " was added succesfully.\n"
                         )
+
+def printConsoleSeparator():
+    for i in range(92):
+        consoleView.insert(END, "-")
+    consoleView.insert(END, "\n")
+
 
 def dedupeRoutine():
     try:
@@ -79,30 +96,34 @@ def dedupeRoutine():
         data = []
         
         def unique():
-            rows = list(csv.reader(csvFile, delimiter=',', quotechar='"'))
-            
-            result = collections.OrderedDict()
-            for r in rows:
-                key = (r[0],r[2] ,r[15]
-                       )  ## The pair (r[1]:r[87]) must be unique
-                if key not in result:
-                    result[key] = r
+           
+            with open(myFilePath, "r", encoding = 'latin-1') as csvFileOpen:
+
+                rows = csv.DictReader(csvFileOpen)
+
+                for row in rows:
+                    key = row.keys()
+                    values = row.values()
+                    print(key + " : " + values)
+                    time.sleep(1)
                 
-            return result.values()
+                return result.values()
         
         data.append(unique())
         
         print(len(data[0]))
-        consoleView.insert(END, "------------------------------------------------------\n")
+
+        printConsoleSeparator()  
         consoleView.insert(END, "Searching Unique Records.\n")
-        consoleView.insert(END, "------------------------------------------------------\n")
+        
+        printConsoleSeparator() 
         consoleView.insert(
                             END, 
                             "Unique Records Found: " + 
                             str(len(data[0]) - 1) + 
                             "\n"
                         )
-        consoleView.insert(END, "------------------------------------------------------\n")
+        
         combinationCalculation = len(data[0])
         
         outputFile = os.path.dirname(myFilePath)
@@ -145,14 +166,14 @@ def dedupeRoutine():
                     
                 root.update_idletasks()
                 root.update()
-                    
-        consoleView.insert(END, "------------------------------------------------------\n")
-        consoleView.insert(END, "Cerrando archivo CSV: OK! \n")
-        consoleView.insert(END, "------------------------------------------------------\n")            
-        consoleView.insert(END, "CSV Listo para importar\n")
-        consoleView.insert(END, "------------------------------------------------------\n")         
-        consoleView.insert(END, "Se encuentra en: " + outputFile + "\n")
-        consoleView.insert(END, "------------------------------------------------------\n")
+        
+        printConsoleSeparator() 
+        consoleView.insert(END, "Closing CSV file: OK! \n")
+        
+        printConsoleSeparator() 
+        consoleView.insert(END, "File exported: " + outputFile + "\n")
+
+        printConsoleSeparator() 
         consoleView.see("end")
         
                     
@@ -226,7 +247,7 @@ consoleView = Text(
                     yscrollcommand = scrollConsole.set
                 )
 #Greeting 
-consoleView.insert(END, "¡Welcome to ContactFixer V1.0!\n")
+consoleView.insert(END, "Welcome to ContactFixer V1.0!\n")
 
 #Pack windows
 #File Selection
