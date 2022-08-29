@@ -1,5 +1,16 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3  
+# -*- coding: utf-8 -*- 
+#----------------------------------------------------------------------------
+# Created By  : Andree Renteria Perez
+# Created Date: 13/03/2015
+# version ='1.0'
+# ---------------------------------------------------------------------------
+# This program was originally written in Python2.X and its purpose is to
+# remove the contact duplicates and trying to align the values with the 
+# corresponding field (i.e put email address in the email field, sometimes
+# it was typed in the wrong field to save time) and making sure to preserve
+# the notes information.
+# --------------------------------------------------------------------------- 
 
 from tkinter import *
 from tkinter import ttk
@@ -102,9 +113,11 @@ def dedupeRoutine():
                 rows = csv.DictReader(csvFileOpen)
 
                 for row in rows:
-                    key = row.keys()
-                    values = row.values()
-                    print(key + " : " + values)
+                    print("The number of columns in the CSV file is: " + \
+                            str(len(row.keys()))) 
+                    
+                    print(row.values())
+
                     time.sleep(1)
                 
                 return result.values()
